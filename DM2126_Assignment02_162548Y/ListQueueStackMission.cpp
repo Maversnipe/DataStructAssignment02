@@ -31,12 +31,13 @@ using std::queue;
 //*******************************************************************//
 // Linked list stuff
 //*******************************************************************//
-LinkedList::LinkedList() 
+LinkedList::LinkedList() : head_(NULL)
 {
 }
 
 LinkedList::~LinkedList()
 { 
+	delete head_;
 }
 
 void LinkedList::push_front(int data)
