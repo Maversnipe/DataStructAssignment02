@@ -42,31 +42,31 @@ LinkedList::~LinkedList()
 
 void LinkedList::push_front(int data)
 {
-	Node newNode(data);			// Create a new node with the new data inside
-	if (size() == 0)
-	{ // If linked list size is 0, head pointer points to the new node
-		head_ = &newNode; 
+	Node* newNode = new Node(data);			// Create a new node with the new data inside
+	if (head_ == NULL)
+	{ // If linked list size is 0
+		head_ = newNode;					// Point head pointer to newNode
 	}
 	else
-	{ // If linked list size is not 0, point head pointer to the new node and 
-		// point the new node's next pointer to the original first node
-		Node* curr = head_;		// Create a node pointer pointing at the head pointer
-		head_ = &newNode;		// Points head pointer to the new node
-		newNode.next = curr;	// Uses the new node's next pointer to point to the original first node
+	{ // If head_ is not NULL
+		newNode->next = head_;				// Point newNode's next pointer to the original head_
+		head_ = newNode;					// Point head_ to the newNode
 	}
 }
 
 void LinkedList::push_back(int data)
 {
-	Node newNode(data);			// Create a new node with the new data inside
-	Node* curr = head_;			// Create a new node pointer, curr, which points to where head_ is pointing
-	if (size() == 0)			
-		head_ = &newNode;		// If size() is 0, head_ pointer will just point to new node
+	Node* newNode = new Node(data);			// Create a new node with the new data inside
+	if (head_ == NULL)			
+		head_ = newNode;					// If head_ is NULL, head_ pointer will just point to new node
 	else
-	{ // If size() is not 0
+	{ // If head_ is not NULL
+		Node* curr = head_;					// Create a new node pointer, curr, which points to where head_ is pointing
+
 		while (curr->next != NULL) // Loops to end of linked list
 			curr = curr->next;
-		curr->next = &newNode;	// Points the last node's next pointer to the new node
+
+		curr->next = newNode;				// Points the last node's next pointer to the new node
 	}
 }
 
@@ -74,8 +74,8 @@ int LinkedList::pop_front()
 {
 	int deletedVal = 0;			// Create an int to store the value of the deleted node
 
-	if (size() == 0)	
-		return deletedVal;		// Returns 0 if size() is 0
+	if (head_ == NULL)	
+		return deletedVal;		// Returns 0 if head_ is NULL
 
 	Node* curr = head_;			// Create a node pointer, curr, which points to where head_ is pointing
 	head_ = head_->next;		// Points head pointer to the next node
@@ -90,8 +90,10 @@ int LinkedList::pop_back()
 {    
 	int deletedVal = 0;
 	
-	if (size() == 0)
+	if (head_ == NULL)
 		return deletedVal;
+	else if (head_->next == NULL)
+		return pop_front();
 
 	Node* curr = head_->next;
 	Node* beforeCurr = head_;
@@ -101,10 +103,12 @@ int LinkedList::pop_back()
 		curr = curr->next;
 	}
 	deletedVal = curr->data;
-	beforeCurr = NULL;
+	beforeCurr->next = NULL;
 	curr = NULL;
-	delete beforeCurr;
+	delete beforeCurr->next;
 	delete curr;
+	beforeCurr = NULL;
+	delete beforeCurr;
 
     return deletedVal;
 }
@@ -115,7 +119,7 @@ void LinkedList::insert_at(int pos, int data)
 	{
 		push_front(data);
 	}
-	else if (pos > (size() - 1))
+	else if (pos >= (size()))
 	{
 		push_back(data);
 	}
@@ -171,6 +175,11 @@ int LinkedList::pop_at(int pos)
 size_t LinkedList::size()
 {
 	size_t theSize = 0;
+
+	if (head_ == NULL)
+		return theSize;
+	else
+		theSize = 1;
 	Node* curr = head_;
 	while (curr->next)
 	{
