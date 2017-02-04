@@ -50,41 +50,45 @@ int main()
     cout << "Part 2" << endl;
     Queue q;
     q.enqueue(20);
-    q.enqueue(42);/*
-    cout << q.dequeue() << endl;*/
+	cout << q.dequeue() << endl;
+	q.enqueue(20);
+	cout << q.dequeue() << endl;
+	cout << q.dequeue() << endl;
     cout << q.size() << endl;
     cout << endl;
 
-//    // part 3
-//    cout << "Part 3" << endl;
-//    Stack s;
-//    s.push(46);
-//    s.push(8);
-//    cout << s.pop() << endl;
-//    cout << s.size() << endl;
-//    cout << endl;
-//
-//    // part 4
-//    cout << "Part 4" << endl;
-//    const char* input = "<>";
-//    cout << Brackets(input) << endl;
-//    cout << endl;
-//
-//
-//    // part 5
-//    cout << "Part 5" << endl;
-//    int dataArray[] = {1, 4, 5, 6, 9, 1, 1, 4};
-//    int queryArray[] = {1, 2, 3};
-//
-//    vector<int> data(dataArray, dataArray + sizeof(dataArray) / sizeof(dataArray[0]));
-//    vector<int> queries(queryArray, queryArray + sizeof(queryArray) / sizeof(queryArray[0]));
-//    vector<unsigned int> results;
-//    QueryMachine(data, queries, results);
-//    for (size_t i = 0; i < results.size(); ++i)
-//    {
-//        cout << results[i] << " ";
-//    }
-//    cout << endl;
+    // part 3
+    cout << "Part 3" << endl;
+    Stack s;
+    s.push(46);
+    s.push(8);
+	if ((s.pop() == 46) || (s.pop() == 8))
+		cout << s.size() << endl;
+	cout << s.pop() << endl;
+	cout << s.pop() << endl;
+    cout << s.size() << endl;
+    cout << endl;
+
+    // part 4
+    cout << "Part 4" << endl;
+    const char* input = "()()[]<>{{[{}]}}";
+    cout << Brackets(input) << endl;
+    cout << endl;
+
+    // part 5
+    cout << "Part 5" << endl;
+    int dataArray[] = {1, 4, 5, 6, 9, 1, 1, 4};
+    int queryArray[] = {1, 4, 5, 3, 6};
+
+    vector<int> data(dataArray, dataArray + sizeof(dataArray) / sizeof(dataArray[0]));
+    vector<int> queries(queryArray, queryArray + sizeof(queryArray) / sizeof(queryArray[0]));
+    vector<unsigned int> results;
+    QueryMachine(data, queries, results);
+    for (size_t i = 0; i < results.size(); ++i)
+    {
+        cout << results[i] << " ";
+    }
+    cout << endl;
 
     cout << "Time taken to run the above code is " << timeTaken(start) << "ms" << endl;
 
