@@ -37,6 +37,7 @@ LinkedList::LinkedList() : head_(NULL)
 
 LinkedList::~LinkedList()
 { 
+	head_ = NULL;
 	delete head_;
 }
 
@@ -46,6 +47,8 @@ void LinkedList::push_front(int data)
 	if (head_ == NULL)
 	{ // If linked list size is 0
 		head_ = newNode;					// Point head pointer to newNode
+		newNode->next = NULL;
+		delete newNode->next;
 	}
 	else
 	{ // If head_ is not NULL
@@ -57,8 +60,10 @@ void LinkedList::push_front(int data)
 void LinkedList::push_back(int data)
 {
 	Node* newNode = new Node(data);			// Create a new node with the new data inside
-	if (head_ == NULL)			
-		head_ = newNode;					// If head_ is NULL, head_ pointer will just point to new node
+	if (head_ == NULL)
+	{
+		head_ = newNode;
+	}
 	else
 	{ // If head_ is not NULL
 		Node* curr = head_;					// Create a new node pointer, curr, which points to where head_ is pointing
@@ -80,7 +85,6 @@ int LinkedList::pop_front()
 	Node* curr = head_;			// Create a node pointer, curr, which points to where head_ is pointing
 	head_ = head_->next;		// Points head pointer to the next node
 	deletedVal = curr->data;	// Put the value of the node to be popped into deletedVal
-	curr = NULL;				// Make curr pointer become NULL
 	delete curr;				// Delete the curr Pointer
 
     return deletedVal;			// Returns the popped node's value
@@ -103,12 +107,9 @@ int LinkedList::pop_back()
 		curr = curr->next;
 	}
 	deletedVal = curr->data;
+
 	beforeCurr->next = NULL;
-	curr = NULL;
-	delete beforeCurr->next;
 	delete curr;
-	beforeCurr = NULL;
-	delete beforeCurr;
 
     return deletedVal;
 }
@@ -119,11 +120,11 @@ void LinkedList::insert_at(int pos, int data)
 	{
 		push_front(data);
 	}
-	else if (pos >= (size()))
+	else if ((size_t)pos >= (size()))
 	{
 		push_back(data);
 	}
-	else if (pos < size())
+	else if ((size_t)pos < size())
 	{
 		Node* beforeCurr = head_;
 		Node* curr = head_->next;
@@ -146,11 +147,11 @@ int LinkedList::pop_at(int pos)
 	{
 		return pop_front();
 	}
-	else if (pos > (size() - 1))
+	else if ((size_t)pos > (size() - 1))
 	{
 		return pop_back();
 	}
-	else if (pos < size())
+	else if ((size_t)pos < size())
 	{
 		int deletedVal = 0;
 		Node* beforeCurr = head_;
@@ -163,9 +164,8 @@ int LinkedList::pop_at(int pos)
 		}
 
 		deletedVal = curr->data;
-		curr = NULL;
-		beforeCurr->next = NULL;
 		delete beforeCurr->next;
+		beforeCurr->next = NULL;
 		delete curr;
 
 		return deletedVal;
