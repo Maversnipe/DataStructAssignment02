@@ -35,27 +35,26 @@ int main()
 
     // part 1
     cout << "Part 1" << endl;
-	LinkedList ll; 
-	cout << ll.size() << endl;
-    ll.push_front(1);
-    ll.push_back(1);
-    cout << ll.size() << endl;
-    cout << ll.pop_back() << endl;
-    cout << ll.pop_front() << endl;
-    cout << ll.pop_back() << endl;
-    ll.insert_at(2, 10);
-    cout << ll.pop_at(0) << endl;
+	LinkedList ll_;
+	ll_.size();
+	ll_.push_front(10);
+	cout << ll_.pop_front() << endl;
+	ll_.pop_back();
+	ll_.pop_at(13);
+	ll_.pop_at(1);
+	ll_.pop_at(0);
+	ll_.pop_at(-1);
+	ll_.pop_at(-1040);
+
+    // part 2
+    cout << "Part 2" << endl;
+    Queue q;
+    q.enqueue(20);
+    q.enqueue(42);/*
+    cout << q.dequeue() << endl;*/
+    cout << q.size() << endl;
     cout << endl;
 
-//    // part 2
-//    cout << "Part 2" << endl;
-//    Queue q;
-//    q.enqueue(20);
-//    q.enqueue(42);
-//    cout << q.dequeue() << endl;
-//    cout << q.size() << endl;
-//    cout << endl;
-//
 //    // part 3
 //    cout << "Part 3" << endl;
 //    Stack s;
@@ -86,10 +85,10 @@ int main()
 //        cout << results[i] << " ";
 //    }
 //    cout << endl;
-//
-//    cout << "Time taken to run the above code is " << timeTaken(start) << "ms" << endl;
-//
-//    return 0;
+
+    cout << "Time taken to run the above code is " << timeTaken(start) << "ms" << endl;
+
+    return 0;
 }
 
 // If you are curious, this calculates the time taken between the start time and the time that this function is called.

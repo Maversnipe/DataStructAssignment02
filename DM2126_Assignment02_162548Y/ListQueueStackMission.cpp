@@ -37,18 +37,16 @@ LinkedList::LinkedList() : head_(NULL)
 
 LinkedList::~LinkedList()
 { 
-	head_ = NULL;
 	delete head_;
+	head_ = NULL;
 }
 
 void LinkedList::push_front(int data)
 {
 	Node* newNode = new Node(data);			// Create a new node with the new data inside
 	if (head_ == NULL)
-	{ // If linked list size is 0
+	{ // If head_ is NULL
 		head_ = newNode;					// Point head pointer to newNode
-		newNode->next = NULL;
-		delete newNode->next;
 	}
 	else
 	{ // If head_ is not NULL
@@ -178,40 +176,73 @@ size_t LinkedList::size()
 
 	if (head_ == NULL)
 		return theSize;
-	else
-		theSize = 1;
+
 	Node* curr = head_;
 	while (curr->next)
 	{
 		theSize++;
 		curr = curr->next;
 	}
-    return theSize;
+    return theSize + 1;
 }
 
 //*******************************************************************//
 // Queue stuff
 //*******************************************************************//
-Queue::Queue() 
+Queue::Queue() : front_(NULL), back_(NULL)
 {
 }
 
 Queue::~Queue()
-{   
+{  
+	delete front_;
+	delete back_;
+	front_ = NULL;
+	back_ = NULL;
 }
 
 void Queue::enqueue(int data)
 {   
+	Node* newNode = new Node(data);
+	if (front_ == NULL)
+	{
+		front_ = newNode;
+		back_ = newNode;
+	}
+	else
+	{
+		back_->next = newNode;
+		back_ = newNode;
+	}
 }
 
 int Queue::dequeue()
 {
-    return 0;
+	int dequeudData = 0;
+	if (front_ == NULL)
+		return 0;
+
+	Node* curr = front_;
+	front_ = front_->next;
+	dequeudData = curr->data;
+	delete curr;
+
+	return 0;
 }
 
 size_t Queue::size()
 {
-    return 0;
+	size_t sizeOfQueue = 0;
+	if (front_ == NULL)
+		return sizeOfQueue;
+	
+	Node* curr = front_;
+	while (curr->next != NULL)
+	{
+		sizeOfQueue++;
+		curr = curr->next;
+	}
+	return sizeOfQueue + 1;
 }
 
 //*******************************************************************//
