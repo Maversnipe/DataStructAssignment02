@@ -37,21 +37,26 @@ int main()
     cout << "Part 1" << endl;
 	LinkedList ll_;
 	ll_.size();
-	ll_.push_front(10);
-	cout << ll_.pop_front() << endl;
+	ll_.push_front(11);
+	ll_.push_front(12);
+	ll_.push_front(13);
+	ll_.push_front(14);
+	ll_.push_front(15);
+	cout << ll_.pop_at(3) << endl;
 	ll_.pop_back();
-	ll_.pop_at(13);
 	ll_.pop_at(1);
 	ll_.pop_at(0);
 	ll_.pop_at(-1);
-	ll_.pop_at(-1040);
+	cout << ll_.pop_at(1) << endl;
+	cout << ll_.pop_at(-10000) << endl;
+	cout << endl;
 
     // part 2
     cout << "Part 2" << endl;
     Queue q;
-    q.enqueue(20);
-	cout << q.dequeue() << endl;
 	q.enqueue(20);
+	q.enqueue(20);
+	cout << q.dequeue() << endl;
 	cout << q.dequeue() << endl;
 	cout << q.dequeue() << endl;
     cout << q.size() << endl;
@@ -62,8 +67,6 @@ int main()
     Stack s;
     s.push(46);
     s.push(8);
-	if ((s.pop() == 46) || (s.pop() == 8))
-		cout << s.size() << endl;
 	cout << s.pop() << endl;
 	cout << s.pop() << endl;
     cout << s.size() << endl;
@@ -77,8 +80,8 @@ int main()
 
     // part 5
     cout << "Part 5" << endl;
-    int dataArray[] = {1, 4, 5, 6, 9, 1, 1, 4};
-    int queryArray[] = {1, 4, 5, 3, 6};
+    int dataArray[] = {1, 1, 1, 1, 9, 10, 1, 4};
+    int queryArray[] = {1, 4, 1, 3, 10};
 
     vector<int> data(dataArray, dataArray + sizeof(dataArray) / sizeof(dataArray[0]));
     vector<int> queries(queryArray, queryArray + sizeof(queryArray) / sizeof(queryArray[0]));

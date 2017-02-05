@@ -23,9 +23,9 @@ using std::queue;
 /*! 
  *  \brief     DM2126 Assignment 2
  *  \details   Submit the whole solution, but only this file will be used to grade
- *  \author    <John Doe>
- *  \date      2015 
- *  \note      <Admin ID>
+ *  \author    Lucas Nguyen Thai Vinh
+ *  \date      4 Feb 2017
+ *  \note      162548Y
  */
 
 //*******************************************************************//
@@ -37,8 +37,16 @@ LinkedList::LinkedList() : head_(NULL)
 
 LinkedList::~LinkedList()
 { 
-	delete head_;
-	head_ = NULL;
+	if (size() != 0)
+	{ // If there is still undeleted Nodes
+		Node* toDelete = head_;
+		while (toDelete)
+		{ 
+			Node* nextToDelete = toDelete->next;
+			delete toDelete;
+			toDelete = nextToDelete;
+		}
+	}
 }
 
 void LinkedList::push_front(int data)
@@ -106,8 +114,8 @@ int LinkedList::pop_back()
 	}
 	deletedVal = curr->data;
 
-	beforeCurr->next = NULL;
 	delete curr;
+	beforeCurr->next = NULL;
 
     return deletedVal;
 }
@@ -126,7 +134,7 @@ void LinkedList::insert_at(int pos, int data)
 	{
 		Node* beforeCurr = head_;
 		Node* curr = head_->next;
-		Node newNode(data);
+		Node* newNode = new Node(data);
 
 		for (int placeToBeInserted = 1; placeToBeInserted < pos; placeToBeInserted++)
 		{
@@ -134,39 +142,38 @@ void LinkedList::insert_at(int pos, int data)
 			curr = curr->next;
 		}
 
-		beforeCurr->next = &newNode;
-		newNode.next = curr;
+		beforeCurr->next = newNode;
+		newNode->next = curr;
 	}
 }
 
 int LinkedList::pop_at(int pos)
 {
+	if (head_ == NULL)
+		return 0;
+
 	if (pos <= 0)
 	{
 		return pop_front();
 	}
-	else if ((size_t)pos > (size() - 1))
-	{
-		return pop_back();
-	}
-	else if ((size_t)pos < size())
+	else
 	{
 		int deletedVal = 0;
+		int count = 1;
 		Node* beforeCurr = head_;
-		Node* curr = head_->next;
-
-		for (int placeToBeInserted = 1; placeToBeInserted < pos; placeToBeInserted++)
+		for (Node* curr = head_->next; curr != NULL; count++)
 		{
+			if (count == pos)
+			{
+				beforeCurr->next = curr->next;
+				deletedVal = curr->data;
+				delete curr;
+				return deletedVal;
+			}
 			beforeCurr = curr;
 			curr = curr->next;
 		}
 
-		deletedVal = curr->data;
-		delete beforeCurr->next;
-		beforeCurr->next = NULL;
-		delete curr;
-
-		return deletedVal;
 	}
 }
 
@@ -178,7 +185,7 @@ size_t LinkedList::size()
 		return theSize;
 
 	Node* curr = head_;
-	while (curr->next)
+	while (curr->next != NULL)
 	{
 		theSize++;
 		curr = curr->next;
@@ -195,10 +202,16 @@ Queue::Queue() : front_(NULL), back_(NULL)
 
 Queue::~Queue()
 {  
-	delete front_;
-	delete back_;
-	front_ = NULL;
-	back_ = NULL;
+	if (size() != 0)
+	{
+		Node* toDelete = front_;
+		while (toDelete != NULL)
+		{
+			Node* nextToDelete = toDelete->next;
+			delete toDelete;
+			toDelete = nextToDelete;
+		}
+	}
 }
 
 void Queue::enqueue(int data)
@@ -218,16 +231,25 @@ void Queue::enqueue(int data)
 
 int Queue::dequeue()
 {
-	int dequeudData = 0;
+	int dequeuedData = 0;
 	if (front_ == NULL)
-		return 0;
+		return dequeuedData;
+	else if (front_ == back_)
+	{
+		Node* curr = front_;
+		front_ = front_->next;
+		back_ = front_;
+		dequeuedData = curr->data;
+		delete curr;
+		return dequeuedData;
+	}
+
 
 	Node* curr = front_;
 	front_ = front_->next;
-	dequeudData = curr->data;
+	dequeuedData = curr->data;
 	delete curr;
-
-	return 0;
+	return dequeuedData;
 }
 
 size_t Queue::size()
@@ -248,27 +270,63 @@ size_t Queue::size()
 //*******************************************************************//
 // Stack stuff
 //*******************************************************************//
-Stack::Stack()
+Stack::Stack() : top_(NULL)
 {
-
 }
 
 Stack::~Stack()
 {
+	if (size() != 0)
+	{
+		Node* toDelete = top_;
+		while (toDelete != NULL)
+		{
+			Node* nextToDelete = toDelete->next;
+			delete toDelete;
+			toDelete = nextToDelete;
+		}
+	}
 }
 
 void Stack::push(int data)
 {
+	Node* newNode = new Node(data);
+	if (top_ == NULL)
+		top_ = newNode;
+	else
+	{
+		newNode->next = top_;
+		top_ = newNode;
+	}
 }
 
 int Stack::pop()
 {
-    return 0;
+	int poppedVal = 0;
+	if (top_ == NULL)
+		return poppedVal;
+	
+	Node* curr = top_;
+	top_ = top_->next;
+	poppedVal = curr->data;
+	delete curr;
+
+    return poppedVal;
 }
 
 size_t Stack::size()
 {
-    return 0;
+	size_t sizeOfStack = 0;
+	if (top_ == NULL)
+		return sizeOfStack;
+
+	Node* curr = top_;
+	while (curr->next != NULL)
+	{
+		sizeOfStack++;
+		curr = curr->next;
+	}
+	return sizeOfStack + 1;
 }
 
 
@@ -276,10 +334,56 @@ size_t Stack::size()
 // Balanced parenthesis
 bool Brackets(const string& input)
 {
-    return true;
+	int stringLength = input.size();
+	Stack bracket;
+	for (int bracketCheck = 0; bracketCheck < stringLength; bracketCheck++)
+	{
+		if ((input[bracketCheck] == '(') || (input[bracketCheck] == '{')
+			|| (input[bracketCheck] == '[') || (input[bracketCheck] == '<'))
+			bracket.push(input[bracketCheck]);
+		else if ((input[bracketCheck] == ')') || (input[bracketCheck] == '}')
+			|| (input[bracketCheck] == ']') || (input[bracketCheck] == '>'))
+		{
+			if (bracket.size() == 0)
+				return false;
+			switch (input[bracketCheck])
+			{
+			case ')':
+				if (bracket.pop() != 40)
+					return false;
+				break;
+			case '}':
+				if (bracket.pop() != 123)
+					return false;
+				break;
+			case ']':
+				if (bracket.pop() != 91)
+					return false;
+				break;
+			case '>':
+				if (bracket.pop() != 60)
+					return false;
+				break;
+			}
+		}
+	}
+	if (bracket.size() == 0)
+		return true;
+	else
+		return false;
 }
 
 // Query machine, hits
 void QueryMachine(vector<int>& data, vector<int>& queries, vector<unsigned int>& results)
 {
+	for (unsigned int queryCount = 0; queryCount < queries.size(); queryCount++)
+	{
+		unsigned int result = 0;
+		for (unsigned int checker = 0; checker < data.size(); checker++)
+		{
+			if (queries[queryCount] == data[checker])
+				result++;
+		}
+		results.push_back(result);
+	}
 }
